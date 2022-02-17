@@ -1,0 +1,13 @@
+.App {
+	text-align: center;
+}
+
+.blue-btn {
+	background: #215d79;
+	color: #f7f7f7;
+	border: none;
+	padding: 12px 32px;
+	font-size: 16px;
+	border-radius: 50px;
+	font-family: "Star Jedi", sans-serif;
+}

@@ -1,0 +1,21 @@
+.notFoundPage {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 2rem;
+	width: 100vw;
+	height: 100vh;
+	background-position: center;
+	background-size: cover;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.notFoundPage > button {
+	position: absolute;
+	top: 70%;
+	left: calc(50% - 70px);
+	z-index: 2;
+	cursor: pointer;
+}

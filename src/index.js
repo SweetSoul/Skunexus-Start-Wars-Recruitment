@@ -3,10 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Routers from './routers';
 import reportWebVitals from './reportWebVitals';
+import { GalaxyProvider } from './store/context/galaxy';
+import galaxyReducer, { initialGalaxyState } from './store/reducers/galaxy.reducer';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { SettingsProvider } from './store/context/settings';
+import settingsReducer, { initialSettingsState } from './store/reducers/settings.reducer';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routers />
+    <SettingsProvider reducer={settingsReducer} initialState={initialSettingsState}>
+      <GalaxyProvider reducer={galaxyReducer} initialState={initialGalaxyState}>
+        <Routers />
+      </GalaxyProvider>
+    </SettingsProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
