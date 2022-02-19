@@ -1,11 +1,10 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { UPDATE_SETTINGS } from "../store/reducers/settings.reducer";
-import useGalaxy from "./useGalaxy";
-import useSettings from "./useSettings";
+import { updateSettings } from "../store/slices/settingsSlice";
 
 export default function useData() {
-    const { galaxy } = useGalaxy();
-    const { updateSettings } = useSettings();
+    const galaxy = useSelector(state => state.galaxy);
+    const dispatch = useDispatch();
     const navigate = useHistory();
 
     const planetsData = {
@@ -43,7 +42,7 @@ export default function useData() {
         gridBtns: [
             {
                 label: "New planet",
-                action: () => updateSettings(UPDATE_SETTINGS, { modal: { newPlanet: true } })
+                action: () => dispatch(updateSettings({ modal: { newPlanet: true } }))
             }
         ],
     };

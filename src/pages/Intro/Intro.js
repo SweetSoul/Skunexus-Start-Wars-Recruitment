@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import styles from './intro.module.css';
-import useGalaxy from '../../hooks/useGalaxy';
-import { INTRO_END } from '../../store/reducers/galaxy.reducer';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleIntro } from '../../store/slices/galaxySlice';
 
 export default function Intro() {
     const [timer, setTimer] = useState(20);
-    const { galaxy, updateGalaxy } = useGalaxy();
+    const galaxy = useSelector(state => state.galaxy);
+    const dispatch = useDispatch();
     const navigate = useHistory();
 
     const skipIntro = () => {
-        updateGalaxy(INTRO_END);
+        dispatch(toggleIntro());
         navigate.push('/');
     };
 
@@ -22,12 +23,12 @@ export default function Intro() {
         const interval = setInterval(() => {
             setTimer(timer => timer - 1);
             if (timer === 1) {
-                updateGalaxy(INTRO_END);
+                dispatch(toggleIntro());
                 navigate.push('/');
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [galaxy.intro, navigate, updateGalaxy, timer]);
+    }, [galaxy.intro, navigate, dispatch, timer]);
 
     return <div className={styles.fullScreen}>
         <div className={styles.wrapper}>

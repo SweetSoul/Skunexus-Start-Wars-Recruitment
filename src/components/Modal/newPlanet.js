@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Button, Form, FormFeedback, FormGroup, Input, Label, Modal, ModalBody, ModalHeader } from "reactstrap";
-import useSettings from "../../hooks/useSettings";
-import { UPDATE_SETTINGS } from "../../store/reducers/settings.reducer";
 import useNotification from '../../hooks/useNotification';
-import useGalaxy from "../../hooks/useGalaxy";
-import { ADD_PLANET } from "../../store/reducers/galaxy.reducer";
 import formatString, { CAPITALIZE } from "../../utils/formatString";
+import { useDispatch, useSelector } from "react-redux";
+import { addPlanet } from "../../store/slices/galaxySlice";
+import { updateSettings } from "../../store/slices/settingsSlice";
 
 export default function NewPlanetModal() {
     const [name, setName] = useState("");
@@ -25,8 +24,8 @@ export default function NewPlanetModal() {
     const [surfaceWater, setSurfaceWater] = useState();
     const [surfaceWaterInvalid, setSurfaceWaterInvalid] = useState(false);
 
-    const { settings, updateSettings } = useSettings();
-    const { updateGalaxy } = useGalaxy();
+    const settings = useSelector(state => state.settings);
+    const dispatch = useDispatch();
     const notify = useNotification();
 
     const terrainOptions = ['desert', 'jungle', 'lava', 'mountains', 'ocean', 'rainforest', 'swamp', 'tundra',
@@ -68,14 +67,14 @@ export default function NewPlanetModal() {
                 terrain,
                 surface_water: surfaceWater,
             };
-            updateGalaxy(ADD_PLANET, planet);
-            updateSettings(UPDATE_SETTINGS, { modal: { newPlanet: false } });
+            dispatch(addPlanet(planet));
+            dispatch(updateSettings({ modal: { newPlanet: false } }));
             return notify("Planet added successfully", "Success", "success");
         }
     };
 
     const handleToggle = () => {
-        updateSettings(UPDATE_SETTINGS, { modal: { newPlanet: !settings.modal.newPlanet } });
+        dispatch(updateSettings({ modal: { newPlanet: !settings.modal.newPlanet } }));
     };
 
     return <Modal isOpen={settings.modal.newPlanet} toggle={handleToggle} unmountOnClose>

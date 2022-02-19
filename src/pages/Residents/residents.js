@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import useGalaxy from '../../hooks/useGalaxy';
 import Grid from '../../components/Grid';
 import useData from '../../hooks/useData';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchResidents } from '../../store/slices/galaxySlice';
 
 
 function Residents() {
-    const { updateGalaxy } = useGalaxy();
+    const dispatch = useDispatch();
     const { residentsData } = useData();
     const location = useLocation();
 
@@ -14,10 +15,10 @@ function Residents() {
 
     useEffect(() => {
         if (locationUrls) {
-            updateGalaxy('FETCH_RESIDENTS', { urls: locationUrls });
+            dispatch(fetchResidents(locationUrls));
             return;
         }
-        updateGalaxy('FETCH_RESIDENTS');
+        dispatch(fetchResidents());
         // eslint-disable-next-line
     }, [locationUrls]);
 

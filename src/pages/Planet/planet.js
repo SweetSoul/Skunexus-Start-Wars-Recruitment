@@ -1,12 +1,14 @@
-import useGalaxy from '../../hooks/useGalaxy';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import styles from "./planet.module.css";
 import { Button } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPlanet, fetchPlanets } from '../../store/slices/galaxySlice';
 
 function Planet() {
-    const { galaxy, updateGalaxy } = useGalaxy();
+    const galaxy = useSelector(state => state.galaxy);
+    const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useHistory();
     const planetUrl = location.state.url;
@@ -14,10 +16,10 @@ function Planet() {
 
     useEffect(() => {
         if (!galaxy.planets.length) {
-            updateGalaxy("FETCH_PLANETS");
+            dispatch(fetchPlanets());
         }
         if (planetData === undefined) {
-            updateGalaxy("FETCH_PLANET", planetUrl);
+            dispatch(fetchPlanet(planetUrl));
         }
         // eslint-disable-next-line
     }, []);

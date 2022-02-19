@@ -1,30 +1,36 @@
 import { useEffect } from 'react';
-import useGalaxy from '../../hooks/useGalaxy';
 import Grid from '../../components/Grid';
 import useData from '../../hooks/useData';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchFilms } from '../../store/slices/galaxySlice';
 
 
 function Films() {
-    const { updateGalaxy } = useGalaxy();
+    const dispatch = useDispatch();
     const { filmsData } = useData();
     const location = useLocation();
 
     let locationUrls = location.state ? location.state.urls : [];
+    //deep copy filmsData and filter its values to get only urls that exist in filmsData
+    let filmsFiltered = { ...filmsData };
+    filmsFiltered.values = filmsFiltered.values.filter(film => {
+        return locationUrls.includes(film.url);
+    });
 
     useEffect(() => {
         if (locationUrls.length) {
-            updateGalaxy('FETCH_FILMS', { urls: locationUrls });
+            dispatch(fetchFilms(locationUrls));
             return;
         }
-        updateGalaxy('FETCH_FILMS');
+        dispatch(fetchFilms());
         // eslint-disable-next-line
     }, [locationUrls]);
 
     return (
         <div>
             <div className="onTop">
-                <Grid data={filmsData} />
+                <Grid data={filmsFiltered} />
             </div>
         </div>
     );

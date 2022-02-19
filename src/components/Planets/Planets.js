@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
-import useGalaxy from '../../hooks/useGalaxy';
 import Grid from '../Grid';
 import useData from '../../hooks/useData';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPlanets } from '../../store/slices/galaxySlice';
 
 
 function Planets({ countFilms, countResidents }) {
-  const { galaxy, updateGalaxy } = useGalaxy();
+  const galaxy = useSelector(state => state.galaxy);
+  const dispatch = useDispatch();
   const { planetsData } = useData();
 
   const finalData = _.cloneDeep(planetsData);
@@ -22,7 +24,7 @@ function Planets({ countFilms, countResidents }) {
 
   useEffect(() => {
     if (!galaxy.planets?.length) {
-      updateGalaxy('FETCH_PLANETS');
+      dispatch(fetchPlanets());
     }
     // eslint-disable-next-line
   }, [galaxy.planets]);
